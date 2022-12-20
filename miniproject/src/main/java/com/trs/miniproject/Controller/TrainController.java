@@ -35,11 +35,11 @@ public class TrainController {
 //			 return "trainstatus updated";
 //			 
 //		 }
-		 @PutMapping("/updateTrainCapacity/{id}/{capacity}")
-		 public String updateTrainStatus(@PathVariable Integer id,@PathVariable Integer  capacity){
-			 trainservice.updateTrainCapacity(id,capacity);
-			 return "traincapacity Updated";
-		 }
+//		 @PutMapping("/updateTrainCapacity/{id}/{capacity}")
+//		 public String updateTrainStatus(@PathVariable Integer id,@PathVariable Integer  capacity){
+//			 trainservice.updateTrainCapacity(id,capacity);
+//			 return "traincapacity Updated";
+//		 }
 	@GetMapping("/fetch-all")
 	public List<Train> getAllTrains() {
 		return (List<Train>) trainservice.findAll();

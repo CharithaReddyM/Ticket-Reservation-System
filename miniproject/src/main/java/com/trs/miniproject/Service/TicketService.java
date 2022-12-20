@@ -6,23 +6,39 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.trs.miniproject.Exception.CapacityExceedException;
+import com.trs.miniproject.Exception.DestinationException;
 import com.trs.miniproject.Exception.NumOfTicketsExceedException;
+import com.trs.miniproject.Exception.SourceException;
 import com.trs.miniproject.Exception.TicketIdUniqueException;
 import com.trs.miniproject.Exception.TicketNotFound;
 import com.trs.miniproject.Exception.TrainNotFound;
+import com.trs.miniproject.Exception.SeatsAllotedException;
+import com.trs.miniproject.Exception.ArrivalDateException;
+import com.trs.miniproject.Exception.TravellingDateException;
+import com.trs.miniproject.Exception.PassengerException;
+
+
 import com.trs.miniproject.Model.Passenger;
 //import com.trs.miniproject.Exception.PassengerNotFound;
 //import com.trs.miniproject.Exception.TicketIdUniqueException;
 //import com.trs.miniproject.Model.Passenger;
 import com.trs.miniproject.Model.Ticket;
 import com.trs.miniproject.Model.Train;
+import com.trs.miniproject.Repository.PassengerRepository;
 import com.trs.miniproject.Repository.TicketRepository;
+import com.trs.miniproject.Repository.TrainRepository;
+import com.trs.miniproject.Exception.TrainIdException;
+import io.micrometer.common.util.StringUtils;
 
 @Service
 public class TicketService {
 	@Autowired
 	 private TicketRepository ticketrepository;
-	
+	@Autowired
+	private PassengerRepository passengerrepository;
+	@Autowired
+	private TrainRepository trainrepository;
      
 //	 public List<Ticket> getALlUsers() {
 //	     return (List<Ticket>) ticketrepository.findAll();
@@ -59,6 +75,29 @@ public class TicketService {
 	public Ticket save(Ticket ticket) 
 	
 	{
+		if(StringUtils.isBlank(ticket.getSource())) {
+			throw new SourceException();
+		}
+		if(StringUtils.isBlank(ticket.getDestination())) {
+			throw new DestinationException();
+		}
+		if((ticket.getSeatAllotted()<=0)) {
+			throw new SeatsAllotedException();
+		}
+		if((ticket.getArrivalDate()<=0)) {
+			throw new ArrivalDateException();
+		}
+		if((ticket.getTravellingDate()<=0)) {
+			throw new TravellingDateException();
+		}
+		
+		if((ticket.getPassenger().isEmpty())) {
+			throw new PassengerException();
+		}
+		if((ticket.getTrain().getTrainId()<0)) {
+			throw new TrainIdException();
+		}
+	
 		if(ticket.getPassenger().size()<=3) {
 
 		return ticketrepository.save(ticket);
@@ -67,17 +106,31 @@ public class TicketService {
 			throw new NumOfTicketsExceedException();
 		}
 	}
-	  public Ticket Concession(Integer id,Integer ticketAmount ) {
+	  public Ticket Concession(Integer id) {
 			Ticket ticket = findByTicketId(id);
+		  Integer Amount=0;
+		  Integer  ticketAmount=ticket.getTicketAmount();
+			for(Passenger psgr:ticket.getPassenger()) {
 
-		if( ((Passenger) ticket.getPassenger()).getPassengerAge()>=60) {
-			ticketAmount=ticketAmount-((ticketAmount)/10);
-			ticket.setTicketAmount(ticketAmount);
-			return ticketrepository.save(ticket);
-          }
+		if( ( psgr.getPassengerAge()>=60))
+				{
+			     Amount=ticketAmount-((ticketAmount)/10);
+			     //ticket.setTicketAmount(Amount);
+			     ticketAmount=ticketAmount+Amount;
+			   ticket.setTicketAmount(ticketAmount);
+			 	return ticketrepository.save(ticket);
+
+			}
 		else {
-			return ticket;
+			Amount=Amount+ticketAmount;
+			ticketAmount=ticketAmount+Amount;
+			   ticket.setTicketAmount(ticketAmount);
+			   return ticketrepository.save(ticket);
+
 		}
+		
+			}
+			return ticket;
 	}
 
 
@@ -157,9 +210,25 @@ public class TicketService {
 		 return null;
 	
 	}
+
+
+	public Ticket updateTraincapacity(Integer id) {
+		Ticket ticket = findByTicketId(id);
+        if(ticket.getTrain().getCapacity()<=10)
+        {
+			return ticketrepository.save(ticket);
+
+        }
+        else {
+
+			throw new CapacityExceedException();
+		
+        }
 		
 	}
-
+	}
+		
+	
 		
 
 

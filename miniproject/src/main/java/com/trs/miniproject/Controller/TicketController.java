@@ -37,9 +37,9 @@ public class TicketController {
 		return (List<Ticket>) ticketservice.findAll();
 		
 }
-	@GetMapping("/fetch-all-ticketafter-concession")
-	public Ticket getAllTicket(Integer id,Integer ticketAmount ) {
-		return ticketservice.Concession(id,ticketAmount); 
+	@GetMapping("/fetch-all-ticketafter-concession/{id}")
+	public Ticket getAllTicket(@PathVariable Integer id) {
+		return  ticketservice.Concession(id); 
 		
 	}
 	@PostMapping("/addtrain")
@@ -100,6 +100,11 @@ public String updateTrainStatus(@PathVariable Integer id,@PathVariable boolean s
 	 return "trainstatus updated";
 	 
 }
+@PutMapping("/updateTraincapacity/{id}")
+public Ticket updateTraincapacity(@PathVariable Integer id){
+	 return ticketservice.updateTraincapacity(id);
+}
+	 
 @GetMapping("/fetch-all-passenger")
 public List<Passenger> getAllPassengers() {
 	return passengerservice.getAll();

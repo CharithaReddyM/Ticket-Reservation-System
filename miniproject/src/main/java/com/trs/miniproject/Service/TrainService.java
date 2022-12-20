@@ -43,23 +43,6 @@ public class TrainService {
 	 public  Train findBytrainId(Integer id) {
 		 return  trainrepository.findById(id).get();
 	 }
-//	 public Train check(int id) {
-//			Train train = findBystatus(id);
-//			if(train.isAvailable=yes)
-//			{
-//				 return (Train) trainrepository.findAll();
-//
-//			}
-//			else {
-//				throw new TrainNotAvailableException();
-//			}
-//			
-//	 }
-//
-//	private Train findBystatus(int id) {
-//	
-//		;
-//	}
 
 
 	public Train save(Train train) {
@@ -85,56 +68,22 @@ public class TrainService {
 				throw new TrainNotFound();
 			}
 		}
-	//public Train updateTrainStatus(Integer id, boolean status) {
-		
+	
+//	public Train updateTrainCapacity(Integer id, Integer capacity) {
 //		Train train = findBytrainId(id);
-//		if(train.getTrainId() == id) {
-//			train.setIsAvailable(status);
+//        if(train.getCapacity()<=10)
+//        {
 //			return trainrepository.save(train);
 //
-//		}
-//		else 
-//		{   try {
-//			throw new TrainNotFound();
-//		}catch(Exception e) {
-//			System.out.println("Exception");
+//        }
+//        else {
+//
+//			throw new CapacityExceedException();
 //		
-//		}
-//		}
-//	
-//		 try {
-//			if(train.getIsAvailable()==false) {
-//				 
-//				   ticketrepository.deleteAll(); 
-//			//return "ticket deleted due to not availability";
-//			  }
-//			 
-//			  else {
-//				 trainrepository.save(train);
-//				 //return "ticked reserved";
-//			  }
-//		} catch (Exception e) {
-//	
-//			e.printStackTrace();
-//		}
-//		 return null;
-//	
+//        }
+//		
 //	}
-	public Train updateTrainCapacity(Integer id, Integer capacity) {
-		Train train = findBytrainId(id);
-        if(train.getCapacity()<=10)
-        {
-			return trainrepository.save(train);
-
-        }
-        else {
-
-			throw new CapacityExceedException();
-		
-        }
-		
-	}
-		
+//		
 	}
 
 

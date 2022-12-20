@@ -1,6 +1,8 @@
 package com.trs.miniproject.Model;
 
+import java.sql.Date;
 import java.util.List;
+
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
